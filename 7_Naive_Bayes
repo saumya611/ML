@@ -1,0 +1,63 @@
+
+from IPython.display import Image
+Image(filename='PlayTennis.png')
+==========================================
+
+
+weather=['Sunny','Sunny','Overcast','Rainy','Rainy','Rainy','Overcast','Sunny','Sunny',
+'Rainy','Sunny','Overcast','Overcast','Rainy']
+temp=['Hot','Hot','Hot','Mild','Cool','Cool','Cool','Mild','Cool','Mild','Mild','Mild','Hot','Mild']
+humidity=['High', 'High','High','High','Normal','Normal','Normal','High', 'Normal','Normal','Normal','High','Normal','High'] 
+windy=['weak', 'strong', 'weak', 'weak', 'weak', 'strong', 'strong', 'weak', 'weak', 'weak', 'strong', 'strong', 'weak','strong']
+
+
+play=['No','No','Yes','Yes','Yes','No','Yes','No','Yes','Yes','Yes','Yes','Yes','No']
+
+
+from sklearn import preprocessing
+labelEncoder = preprocessing.LabelEncoder()
+
+weather_encoded=labelEncoder.fit_transform(weather)
+print ("Encoded value of weather:", weather_encoded)
+
+temp_encoded=labelEncoder.fit_transform(temp)
+label=labelEncoder.fit_transform(play)
+print ("Encoded value of Temp:",temp_encoded)
+
+humidity_encoded=labelEncoder.fit_transform(humidity)
+print ("Encoded value of humidity:", humidity_encoded)
+
+windy_encoded=labelEncoder.fit_transform(windy)
+print ("Encoded value of windy:", windy_encoded)
+
+print ("\nEncoded value of Play:",label)
+
+
+features=tuple(zip(weather_encoded,temp_encoded,humidity_encoded,windy_encoded))
+print (features)
+
+#Import Gaussian Naive Bayes model
+from sklearn.naive_bayes import GaussianNB
+
+#Create a Gaussian Classifier
+model = GaussianNB()
+
+# Train the model using the training sets
+model.fit(features,label)
+
+new_data = [0,2,0,0] # 0:Overcast Weather, 2:Mild Temp, 0:Strong Windy, 0:Humidity Strong
+
+#Predict Output
+predicted= model.predict([new_data]) 
+print ("Predicted Value:", predicted)
+
+print ("Play Tennis: Yes" if predicted else "Play Tennis: No")
+
+new_data = [2,0,0,0] # 0:Sunny Weather, 2:Cool Temp, 0:Strong Windy, 0:Humidity Strong
+
+
+predicted= model.predict([new_data]) 
+print ("Predicted Value:", predicted)
+
+print ("Play Tennis: Yes" if predicted else "Play Tennis: No")
+
